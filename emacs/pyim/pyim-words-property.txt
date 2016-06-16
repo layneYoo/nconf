@@ -1,0 +1,7 @@
+;; -*- coding: utf-8 -*-
+你好 :count 2
+中华 :count 2
+哈哈 :count 3
+你是 :count 2
+共和国 :count 2
+我爱你 :count 2

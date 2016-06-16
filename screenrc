@@ -1,0 +1,1 @@
+hardstatus string "%{=}%{+b kR}%H %{+b kB}[%= %?%-Lw%?%{+b wB}%n*%f %rt%?(%u)%?%{+b kB}%? %t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}] [%{+b B}%Y-%m-%d %D %{+b W}%c %{g}]"
