@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/root/projects/3rdparty/src/github.com/gMarathonCtl/cfg'
+let g:netrw_dirhist_2='/root/projects/3rdparty/src/github.com/gMarathonCtl/opt'
+let g:netrw_dirhist_3='/root/projects/3rdparty/src/github.com/gMarathonCtl/cfg'
+let g:netrw_dirhist_4='/root/projects/3rdparty/src/github.com/gMarathonCtl/vendor/github.com/layneYoo/mCtl/marathon'
