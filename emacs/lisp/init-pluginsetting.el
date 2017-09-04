@@ -4,6 +4,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; setting font
+;;(set-default-font "YaHei Consolas Hybird-9")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 设置标题栏
+(setq frame-title-format "Ψ ^_^ Ψ ") 
+;;在标题栏显示buffer的名字，而不是 emacs@wangyin.com 这样没用的提示
+;; (setq frame-title-format "emacs@%b")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; 开启全局 Company 补全
 (global-company-mode 1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,6 +36,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; you complete me
+(require 'company-ycmd)
+(company-ycmd-setup)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 拼音
 (require 'chinese-pyim)
 (setq default-input-method "chinese-pyim")
@@ -36,9 +54,9 @@
 ;; smartparens
 (require 'smartparens-config)
 ;; Always start smartparens mode in go-mode.
-(add-hook 'go-mode-hook #'smartparens-mode)
+;;(add-hook 'go-mode-hook #'smartparens-mode)
 ;; 全局
-;; (smartparens-global-mode t)
+(smartparens-global-mode t)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -101,15 +119,28 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; set frame size
-(add-to-list 'default-frame-alist '(height . 61))
-(add-to-list 'default-frame-alist '(width . 186))
+;全屏  
+(defun my-fullscreen ()  
+  (interactive)  
+  (x-send-client-message  
+   nil 0 nil "_NET_WM_STATE" 32  
+   '(2 "_NET_WM_STATE_FULLSCREEN" 0))  
+  ;; (x-send-client-message    
+  ;;  nil 0 nil "_NET_WM_STATE" 32    
+  ;;  '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))  
+  )  
+;; (my-fullscreen)  
+  
+(global-set-key [f11] 'my-fullscreen) ; emacs全屏
+;; (add-to-list 'default-frame-alist '(height . 61))
+;; (add-to-list 'default-frame-alist '(width . 186))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;highlight line
-;;;(global-hl-line-mode 1)
-(require 'hl-line)
-(global-hl-line-mode 1)
+(global-hl-line-mode -1)
+;; (require 'hl-line)
+;; (global-hl-line-mode 1)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -130,7 +161,14 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; default theme
-(load-theme 'solarized-light t)
+;;;(load-theme 'solarized-light t)
+(load-theme 'monokai  t)
+;;;(color-theme-andreas)
+;;;(require 'color-theme)
+;;;(color-theme-initialize)
+;;;(color-theme-andreas)
+;;;(color-theme-katester)
+;;;(color-theme-vim-colors)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -138,7 +176,7 @@
 ;; set multi-term
 ;; ------------------------------------------------------------
 (require 'multi-term)
-(setq multi-term-program "/bin/bash")
+(setq multi-term-program "/bin/zsh")
 ;; Use Emacs terminfo, not system terminfo
 (setq system-uses-terminfo nil)
 ;; term color
@@ -204,7 +242,7 @@
 ;; use setq-default to set it for /all/ modes
 (setq-default mode-line-format
   (list
-    "{ ";; the buffer name; the file name as a tool tip
+    "{";; the buffer name; the file name as a tool tip
     '(:eval (propertize "%b " 'face 'font-lock-keyword-face
         'help-echo (buffer-file-name)))
 
@@ -266,10 +304,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;go-mode
 ;;;GOPATH
-(setenv "GOPATH" "/home/xlei/code/golang/")
-
+(setenv "GOPATH" "/home/xlei/xDir/scripts/go/golang/")
 ;;;godoc
 (defun set-exec-path-from-shell-PATH ()
   (let ((path-from-shell (replace-regexp-in-string
@@ -282,30 +318,81 @@
 
 (when window-system (set-exec-path-from-shell-PATH))
 
-
 ;;;Automatically call gofmt on save
-(setq exec-path (cons "/home/xlei/code/go/bin" exec-path))
-(add-to-list 'exec-path "/home/xlei/code/golang/bin")
+(setq exec-path (cons "/home/xlei/xDir/scripts/go/golang/bin" exec-path))
+(add-to-list 'exec-path "/home/xlei/xDir/scripts/go/golang/bin")
 (add-hook 'before-save-hook 'gofmt-before-save)
-
-(require 'auto-complete-config)
-(require 'go-autocomplete)
 
 ;;;Autocomplete
 (defun auto-complete-for-go ()
   (auto-complete-mode 1))
 (add-hook 'go-mode-hook 'auto-complete-for-go)
-
 ;;;gofmt
-;;;;;;(defun go-mode-setup ()
-;;;;;; (go-eldoc-setup)
-;;;;;; (add-hook 'before-save-hook 'gofmt-before-save))
-;;;;;;(add-hook 'go-mode-hook 'go-mode-setup)
+(defun go-mode-setup ()
+ ;;(go-eldoc-setup)
+ (add-hook 'before-save-hook 'gofmt-before-save))
+(add-hook 'go-mode-hook 'go-mode-setup)
 
 
-;;;(with-eval-after-load 'go-mode
-;;;  (require 'go-autocomplete))
+(with-eval-after-load 'go-mode
+ (require 'go-autocomplete))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; 文件末尾
 (provide 'init-pluginsetting)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; disable the welcome page
+(setq inhibit-splash-screen t)
+
+;; define the func to open my configure file
+(defun open-my-init-file()
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+(global-set-key (kbd "<f2>") 'open-my-init-file)
+
+;; enable rencentf-mode
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
+;; highlight current line
+(global-hl-line-mode t)
+
+;; config for javascript
+(setq auto-mode-alist
+	  (append
+	   '(("\\.js\\'" . js2-mode))
+	   auto-mode-alist))
+;; run javascript : node-repl
+
+;; set useful key bind
+(global-set-key (kbd "C-h C-f") 'find-function) ;; find funtion
+(global-set-key (kbd "C-h C-v") 'find-variable) ;; find var
+(global-set-key (kbd "C-h C-k") 'find-function-on-key) ;; find funtion on key
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'popwin)
+(popwin-mode t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; java
+;; jdee  
+(add-to-list 'load-path "~/.emacs.d/plugins/cedet-1.1/common")
+(load-file "~/.emacs.d/plugins/cedet-1.1/common/cedet.el")
+(add-to-list 'load-path "~/.emacs.d/plugins/jdee-2.4.1/lisp")  
+(load "jde")
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/plugins/elib-1.0/"))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; python
+;; elpy-- main actor
+(require 'elpy)
+(elpy-enable)
+;; enable elpy jedi backend
+(setq elpy-rpc-backend "jedi")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

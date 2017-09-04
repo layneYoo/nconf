@@ -1,8 +1,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (>= emacs-major-version 24)
     (require 'package)
+    ;;(package-initialize)
+    ;;(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
+    (add-to-list 'package-archives
+		 '("melpa-stable" . "https://stable.melpa.org/packages/") t))
     (package-initialize)
-    (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t))
 
 ;; cl - Common Lisp Extension
 (require 'cl)
@@ -22,6 +25,24 @@
 			   multi-term
 			   ace-window
 			   ;; smex
+			   emamux
+			   ;; markdown
+			   markdown-mode
+			   ;; kotlin mode
+			   popwin
+
+			   ;; java
+			   speedbar
+			   semantic
+			   eieio
+
+			   ;; python
+			   elpy
+			   flycheck
+			   company-jedi
+	           virtualenvwrapper
+			   
+			   
                ) "Default packages")
 
 (setq package-selected-packages my/packages)
