@@ -1,7 +1,7 @@
 1. Install golang , set GOPATH, GOROOT
 2. Install Vundle.vim : 
 	1) mkdir ~/.vim/bundle
-	2) git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+	2) git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 3. make conf
 4. Run command : PluginInstall, GoInstallBinaries in vim
 5. Plugin 'Valloric/YouCompleteMe'
