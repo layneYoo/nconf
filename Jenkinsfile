@@ -8,7 +8,9 @@ pipeline {
                 timeout(time: 1, unit: 'HOURS')
             }
             steps {
-                echo 'Hello World'
+                dir('JOB') {
+                    git url: "${GIT_URL_JOB}"
+                }
             }
         }
     }
